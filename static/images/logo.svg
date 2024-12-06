@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200" viewBox="0 0 400 200">
+        <!-- Shadow Effect -->
+        <defs>
+            <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+                <feDropShadow dx="3" dy="3" stdDeviation="4" flood-color="rgba(0,0,0,0.5)" />
+            </filter>
+        </defs>
+        <!-- Text with White Fill and Shadow -->
+        <text x="20" y="120" font-family="Arial, sans-serif" font-size="50" font-weight="bold" fill="white" filter="url(#shadow)">
+            Vacancy.ua
+        </text>
+    </svg>
