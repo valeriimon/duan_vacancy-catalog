@@ -1,0 +1,52 @@
+{% extends 'main/base.html' %}
+
+{% block nav %}
+  <ul class="nav nav-pills">
+    <li class="nav-item"><a href="#" class="nav-link">Знайти вакансії</a></li>
+    <li class="nav-item"><a href="#" class="nav-link">Розмістити резюме</a></li>
+  </ul>
+  <button type="button" class="btn btn-primary auth-btn">
+    <a href="{% url 'user:sign-in' %}">Увійти</a>
+  </button>
+{% endblock %}
+
+{% block header_subcontent %}
+  <section class="sub-header py-4">
+    <div class="heading">
+      <h1> Сайт пошуку роботи №1 в Україні </h1>
+      <p class="text-hint">Зараз у нас 85409 актуальних вакансій.</p>
+    </div>
+    <div class="search-vacancy">
+      <form action="/" method="post" class="form">
+        {% csrf_token %}
+        <div class="form-group">
+          <div class="control-wrapper">
+            <input type="text" class="form-control position-control" placeholder="Посада або компанія">
+          </div>
+          <div class="control-wrapper">
+            <select class="form-select region-control" aria-label="Vacancy region" placeholder="Регіон">
+              <option value="4">Дніпро</option>
+              <option value="1">Київ</option>
+              <option value="2">Одеса</option>
+              <option value="3">Львів</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="submit-btn">
+          <button class="btn btn-danger btn-icon">
+            <i class="bi bi-search"></i>
+            Знайти
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+
+{% endblock %}
+
+{% block content %}
+  <p>{{ user.email }}</p>
+  <h1> Index works</h1>
+{% endblock %}

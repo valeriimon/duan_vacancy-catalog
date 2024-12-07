@@ -1,0 +1,23 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<div class="auth d-flex align-items-center justify-content-center h-100 text-center">
+  <div class="card auth-card">
+    <form method="POST" class="card-body auth-form">
+      {% csrf_token %}
+      <div class="form-group">
+        <input type="email" name="email" class="form-control mb-3" placeholder="Ел. пошта">
+        <input type="password" name="password" class="form-control mb-3" placeholder="Пароль">
+      </div>
+      <button type="submit" class="btn btn-primary submit-btn w-100">Увійти</button>
+
+      <p class="mt-3"><a href=""><strong>Увійти як роботодавець</strong></a></p>
+      <span>Ще не з нами?</span>
+      <br>
+      <a href="">Зареєструватися як шукач</a>
+    </form>
+  </div>
+</div>
+
+
+{% endblock %}
