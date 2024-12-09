@@ -1,1 +1,24 @@
 {% extends 'main/base.html' %}
+
+{% block content %}
+<div class="auth d-flex align-items-center justify-content-center h-100 text-center">
+  <div class="card auth-card">
+    <form action="{{ form_action }}" method="POST" class="card-body auth-form">
+      {% csrf_token %}
+      <div class="form-group">
+        {{ form.email }}
+        {{ form.password }}
+        <label for="region" class="text-start w-100 text-muted mb-1">Ваш Регіон</label>
+        {{ form.region }}
+      </div>
+      <button type="submit" class="btn btn-primary submit-btn w-100">Зареєструватися</button>
+
+      <p class="mt-3"><a href="{% url 'user:sign-in' %}"><strong>Увійти</strong></a></p>
+
+      <a href="{% url 'user:company-sign-up' %}">Зареєструватися як роботодавець</a>
+    </form>
+  </div>
+</div>
+
+
+{% endblock %}

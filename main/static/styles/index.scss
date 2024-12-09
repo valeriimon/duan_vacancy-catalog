@@ -7,6 +7,7 @@ html {
 
   --gray-color: #f4f5f6;
   --secondary-color: #1f2c4726;
+  --secondary-color-contrast: #1f2c47;
 
   --border-color-1: rgba(224, 245, 255, .2);
   --border-color-2: rgba(255, 255, 255, .4);
@@ -15,7 +16,8 @@ html {
 }
 
 body {
-  height: 100%;
+  height: fit-content;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
 }
@@ -24,9 +26,9 @@ body {
   background-color: var(--gray-color);
   flex: 1;
   .container {
-    height: 100%;
+    min-height: 100%;
     .row {
-      height: inherit;
+      min-height: inherit;
     }
   }
 }
@@ -62,14 +64,23 @@ body {
     }
   }
 
-  .auth-btn {
-    margin-left: 1rem;
-    background-color: transparent;
-    border-color: var(--border-color-2);
+  .auth-user {
+    margin-left: 1.5rem;
+    display: flex;
+    align-items: center;
 
-    & > a {
+    .dropdown-toggle {
       color: inherit;
-      text-decoration: none;
+    }
+
+    .auth-btn {
+      background-color: transparent;
+      border-color: var(--border-color-2);
+
+      > a {
+        color: inherit;
+        text-decoration: none;
+      }
     }
   }
 
@@ -124,10 +135,16 @@ body {
     .submit-btn {
       margin-left: 5px;
       & > button {
+        min-width: 200px;
         border-radius: .25rem;
       }
     }
   }
+}
+
+.footer {
+  background-color: var(--white);
+  height: 100px;
 }
 
 .auth {
@@ -137,6 +154,23 @@ body {
 
   &-form {
     width: 100%;
+  }
+
+  .sign-up-divider {
+    text-align: center;
+    position: relative;
+    &-text {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      background-color: var(--white);
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 0 20px;
+    }
+    
   }
 }
 
@@ -151,4 +185,52 @@ body {
 .btn-primary {
   background-color: var(--primary-color);
   border-color: var(--primary-color);
+}
+
+.badge {
+  padding: 5px 15px;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.bg-secondary {
+  background-color: var(--secondary-color) !important;
+  color: var(--secondary-color-contrast) !important;
+}
+
+.icon-link {
+  text-decoration: none;
+}
+
+.select2-selection__rendered {
+  display: flex !important;
+  width: 100% !important;
+  .select2-selection__choice {
+    width: fit-content;
+  }
+
+  .select2-search__field {
+    width: 100% !important;
+  }
+}
+
+.attr {
+  &-list {
+    list-style: none;
+    padding-left: 0;
+    font-size: 18px;
+    line-height: 28px;
+  }
+
+  &-item {
+    &:not(:first-child) {
+      margin-top: 10px;
+    }
+
+    display: flex;
+  }
+
+  &-name {
+    width: 200px;
+  }
 }

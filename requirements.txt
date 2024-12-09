@@ -8,3 +8,5 @@ rcssmin==1.1.2
 rjsmin==1.2.2
 sqlparse==0.5.2
 tzdata==2024.2
+django-autocomplete-light~=3.11.0
+django-tinymce~=4.1.0

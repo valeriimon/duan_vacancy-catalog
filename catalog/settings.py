@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 
-
+from compressor.test_settings import STATIC_ROOT
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,8 +41,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'sass_processor',
+    'tinymce',
+    'dal',
+    'dal_select2',
+
     'main',
     'user',
+    'resume',
+    'vacancy'
 ]
 
 MIDDLEWARE = [
@@ -56,6 +62,24 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'catalog.urls'
+
+TINYMCE_DEFAULT_CONFIG = {
+    "theme": "silver",
+    "menubar": 'format',
+    "plugins": "advlist,autolink,lists,link,charmap,preview,anchor,"
+    "visualblocks,code,fullscreen,insertdatetime,media,table,"
+    "code,help,wordcount",
+    "toolbar": "undo redo | formatselect | "
+    "bold italic backcolor | alignleft aligncenter "
+    "alignright alignjustify | bullist numlist outdent indent | "
+    "removeformat | help",
+}
+
+AUTOCOMPLETE_LIGHT = {
+    'SELECT2_JS': (
+        'autocomplete_light/select2.min.js',
+    ),
+}
 
 TEMPLATES = [
     {
@@ -126,11 +150,13 @@ STATICFILES_FINDERS = [
     'sass_processor.finders.CssFinder',
 ]
 
+
+STATIC_ROOT = BASE_DIR / 'static/'
 STATIC_URL = 'static/'
-STATIC_ROOT = 'static/'
 SASS_PROCESSOR_ROOT = STATIC_ROOT
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
