@@ -23,7 +23,9 @@
         <a href="#" class="d-block text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
           <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
         </a>
-        <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1" style="">
+        <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
+          <li class="dropdown-item disabled">{{ auth_user.username }}</li>
+          <li><hr class="dropdown-divider"></li>
           <li><a class="dropdown-item" href="{% url 'resume:list-user' %}">Мої резюме</a></li>
           <li><a class="dropdown-item" href="{% url 'vacancy:list-saved' %}">Збережені вакансії</a></li>
           <li><hr class="dropdown-divider"></li>
