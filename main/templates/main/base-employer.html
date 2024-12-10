@@ -1,0 +1,82 @@
+{% extends 'main/base.html' %}
+
+
+{% block header_topcontent %}
+  {% if not auth_user %}
+      <section class="container d-flex justify-content-end pt-3 pb-2">
+        <a href="{% url 'main:home' %}" class="icon-link text-white">
+          Шукачу
+          <i class="bi bi-chevron-right"></i>
+        </a>
+      </section>
+  {% endif %}
+{% endblock %}
+
+
+{% block nav %}
+  <ul class="nav nav-pills">
+    <li class="nav-item"><a href="{% url 'vacancy:manage' %}" class="nav-link">Створити вакансію</a></li>
+  </ul>
+  <div class="auth-user">
+    {% if auth_user %}
+      <div class="dropdown d-flex align-items-center">
+        <a href="#" class="d-block text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+        </a>
+        <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1" style="">
+          <li><a class="dropdown-item" href="{% url 'vacancy:list-user' %}">Мої вакансії</a></li>
+          <li><a class="dropdown-item" href="{% url 'resume:list-saved' %}">Збережені резюме</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" href="{% url 'user:sign-out' %}">Вийти</a></li>
+        </ul>
+      </div>
+    {% else %}
+      <button type="button" class="btn btn-primary auth-btn">
+        <a href="{% url 'user:sign-in' %}">Увійти</a>
+      </button>
+    {% endif %}
+  </div>
+
+{% endblock %}
+
+{% block header_subcontent %}
+  {% if show_subheader %}
+    <section class="container sub-header py-4">
+    <div class="heading">
+      <h1> Знаходьте співробітників </h1>
+      <p class="text-hint">
+        Зараз у нашій базі {{ total_users }} кандидатів з {{ total_resumes }} резюме.
+        <br>
+        Вам є з кого вибрати.
+      </p>
+    </div>
+    {% if search_form %}
+      <div class="search-form">
+        <form method="get" class="form">
+          <div class="form-group">
+            <div class="control-wrapper">
+              {{ search_form.position }}
+            </div>
+            <div class="control-wrapper">
+              {{ search_form.region  }}
+            </div>
+          </div>
+
+          <div class="submit-btn">
+            <button class="btn btn-danger btn-icon" type="submit">
+              <i class="bi bi-search"></i>
+              Знайти кандидатів
+            </button>
+          </div>
+        </form>
+      </div>
+    {% endif %}
+  </section>
+  {% endif %}
+
+
+{% endblock %}
+
+{% block content %}
+  {% block index_content %} {% endblock %}
+{% endblock %}

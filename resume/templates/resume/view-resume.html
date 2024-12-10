@@ -1,50 +1,77 @@
-{% extends 'main/base.html' %}
-
+{% extends parent_template %}
+{% load custom-tags %}
 {% block content %}
+  <div class="row">
+    <div class="col-md-8 col-12">
+      <div class="card">
+        <div class="card-body">
 
-  <div class="card">
-    <div class="card-body">
-      <div class="card-top-actions pb-2 mb-2">
-          <a href="{% url 'resume:manage' resume.id %}" role="button" class="btn btn-primary">Редагувати</a>
-      </div>
-      <div class="card-title">
-        <h1>{{ resume.created_by.username }}</h1>
-      </div>
-      <h2 class="mt-4 mb-3">{{resume.position.title}}</h2>
-      <ul class="attr-list">
-        <li class="attr-item">
-          <div class="text-muted attr-name">Вік:</div>
-          <div class="attr-value">{{ resume.created_by.age }}</div>
-        </li>
-        <li class="attr-item">
-          <div class="text-muted attr-name">Регіон:</div>
-          <div class="attr-value">{{ resume.region }}</div>
-        </li>
-      </ul>
-      <h4 class="mb-3">Контактна інформація</h4>
-      <ul class="attr-list">
-        <li class="attr-item">
-          <div class="text-muted attr-name">Ел. пошта:</div>
-          <div class="attr-value">{{ resume.email }}</div>
-        </li>
-        <li class="attr-item">
-          <div class="text-muted attr-name">Телефон:</div>
-          <div class="attr-value">{{ resume.phone_number }}</div>
-        </li>
-      </ul>
+            <div class="card-top-actions pb-2 mb-2 d-flex justify-content-between">
+              {% if resume.created_by.username == auth_user.username %}
+                <a href="{% url 'resume:manage' resume.id %}" role="button" class="btn btn-primary">Редагувати</a>
+              {% endif %}
 
-      <h2 class="mt-4 mb-3">Знання і навички</h2>
-      <div class="skill-list">
-        {% for skill in resume.skills.all %}
-          <span class="badge bg-secondary">{{ skill.value }}</span>
+              {% if is_employer %}
+                <a href="" class="btn btn-primary">Запропонувати вакансію</a>
+                {% include 'main/components/save-to-user-btn.html' with data_id=resume.id is_saved=resume.is_saved %}
+              {% endif %}
+            </div>
+
+          <div class="card-title">
+            <h1>{{ resume.created_by.username }}</h1>
+          </div>
+          <h2 class="mt-4 mb-3">{{resume.position.title}}</h2>
+          <ul class="attr-list">
+            <li class="attr-item">
+              <div class="text-muted attr-name">Вік:</div>
+              <div class="attr-value">{{ resume.created_by.age }}</div>
+            </li>
+            <li class="attr-item">
+              <div class="text-muted attr-name">Регіон:</div>
+              <div class="attr-value">{{ resume.region|region }}</div>
+            </li>
+          </ul>
+          <h4 class="mb-3">Контактна інформація</h4>
+          <ul class="attr-list">
+            <li class="attr-item">
+              <div class="text-muted attr-name">Ел. пошта:</div>
+              <div class="attr-value">{{ resume.email }}</div>
+            </li>
+            <li class="attr-item">
+              <div class="text-muted attr-name">Телефон:</div>
+              <div class="attr-value">{{ resume.phone_number }}</div>
+            </li>
+          </ul>
+
+          <h2 class="mt-4 mb-3">Знання і навички</h2>
+          <div class="skill-list">
+            {% for skill in resume.skills.all %}
+              <span class="badge bg-secondary">{{ skill.value }}</span>
+            {% endfor %}
+          </div>
+          <h2 class="mt-4 mb-3">Додаткова інформація</h2>
+          <div class="description">
+            {{ resume.description|safe }}
+          </div>
+
+        </div>
+      </div>
+
+      {% if other_resumes %}
+        <h2 class="mt-4 mb-3">
+          {% if resume.created_by.username == auth_user.username %}
+            Інші мої резюме
+          {% else %}
+            Інші резюме цього кандидата
+          {% endif %}
+        </h2>
+        {% for r in other_resumes %}
+          <div class="wrapper mt-3">
+            {% include 'main/components/resume-simple-card.html' with resume=r show_save=is_employer %}
+          </div>
         {% endfor %}
-      </div>
-      <h2 class="mt-4 mb-3">Деталі</h2>
-      <div class="description border py-2 px-4">
-
-        {{ resume.description|safe }}
-      </div>
-
+      {% endif %}
     </div>
   </div>
+
 {% endblock %}

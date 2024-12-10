@@ -6,15 +6,16 @@ from .models import JobPosition, JobSkill
 
 
 def index_route(request: HttpRequest):
-    print('user', request.user)
-    print('is auth -- ', request.user.is_authenticated)
     if request.user.is_authenticated and request.user.is_employer():
-        return redirect('main:home-employer')
+        return redirect('resume:list')
 
-    return render(request, 'main/index-job-seeker.html', Utils.html_context(request))
+    return redirect('vacancy:list')
 
 def employer_index_route(request: HttpRequest):
-    return render(request, 'main/index-employer.html', Utils.html_context(request))
+    return render(request, 'main/base-employer.html', Utils.html_context(request))
+
+def error_route(request):
+    return render(request, 'main/error.html')
 
 
 class JobPositionAutocompleteView(autocomplete.Select2QuerySetView):

@@ -1,0 +1,15 @@
+<!--
+  Props
+    data_id - item id
+    style_classes - extra css classes
+    is_saved - is item saved to the user
+-->
+<a data-id="{{ data_id }}" href="#" class="btn btn-icon ms-3 {{ style_classes }}">
+  {% if not is_saved %}
+    <i class="bi bi-heart"></i>
+    Зберегти
+  {% else %}
+    <i class="bi bi-check2"></i>
+    Збережено
+  {% endif %}
+</a>

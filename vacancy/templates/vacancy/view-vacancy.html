@@ -1,0 +1,66 @@
+{% extends parent_template %}
+{% load custom-tags %}
+{% block content %}
+  <div class="row">
+    <div class="col-md-8 col-12">
+      <div class="card">
+        <div class="card-body">
+            <div class="card-top-actions pb-2 mb-2 d-flex justify-content-between">
+              {% if vacancy.created_by.username == auth_user.username %}
+                <a href="{% url 'vacancy:manage' vacancy.id %}" role="button" class="btn btn-primary">Редагувати</a>
+              {% endif %}
+
+              {% if is_job_seeker %}
+                <a href="" class="btn btn-primary">Відгукнутися на вакансію</a>
+                {% include 'main/components/save-to-user-btn.html' with data_id=vacancy.id is_saved=vacancy.is_saved %}
+              {% endif %}
+            </div>
+
+          <div class="card-title">
+            <h1>{{ vacancy.position.title }}</h1>
+          </div>
+          <p><strong>{{ vacancy.salary }}</strong></p>
+          <p>
+            <strong>{{ vacancy.created_by.company.name }}</strong>,
+            {{ vacancy.created_by.company.region|region }}
+            <br>
+            {{ vacancy.created_by.company.employees_count }} співробітників
+          </p>
+          <h4 class="mb-3">Контактна інформація</h4>
+          <ul class="attr-list">
+            <li class="attr-item">
+              <div class="text-muted attr-name">Ел. пошта:</div>
+              <div class="attr-value">{{ vacancy.email }}</div>
+            </li>
+            <li class="attr-item">
+              <div class="text-muted attr-name">Телефон:</div>
+              <div class="attr-value">{{ vacancy.phone_number }}</div>
+            </li>
+          </ul>
+          <p>{{ vacancy.employment_type }}</p>
+          <h2 class="mt-4 mb-3">Знання і навички</h2>
+          <div class="skill-list">
+            {% for skill in vacancy.skills.all %}
+              <span class="badge bg-secondary">{{ skill.value }}</span>
+            {% endfor %}
+          </div>
+          <h2 class="mt-4 mb-3">Опис вакансії</h2>
+          <div class="description">
+            {{ vacancy.description|safe }}
+          </div>
+
+        </div>
+      </div>
+
+      {% if other_vacancies %}
+        <h2 class="mt-4 mb-3">Інші вакансії від цієї компанії</h2>
+        {% for v in other_vacancies %}
+          <div class="wrapper mt-3">
+            {% include 'main/components/vacancy-simple-card.html' with vacancy=v show_save=is_job_seeker %}
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+
+{% endblock %}

@@ -1,0 +1,55 @@
+{% load custom-tags %}
+<!--
+  Props:
+    resume - front resume
+    other_resumes - other user's resumes
+    show_others - flag to show others
+    show_save - flag to show save btn
+    show_remove_saved - flag to show remove saved btn
+-->
+<div class="card with-hover">
+  <div class="card-body">
+
+    <div class="card-title d-flex align-items-center justify-content-between">
+      <h2><a href="{% url 'resume:view' resume.id %}" class="text-dark">{{ resume.position.title }}</a></h2>
+      {% if show_save %}
+        {% include 'main/components/save-to-user-btn.html' with data_id=resume.id style_classes="save-resume-btn" is_saved=resume.is_saved %}
+      {% endif %}
+      {% if show_remove_saved and resume.is_saved %}
+        <a href="{% url 'resume:remove-saved' resume.id %}" class="btn btn-icon">
+          <i class="bi bi-x-lg"></i>
+          Видалити
+        </a>
+      {% endif %}
+    </div>
+
+    <p><strong>{{ resume.salary }}</strong></p>
+
+    <strong>{{ resume.created_by.username }}</strong>,
+    {{ resume.created_by.age }} років,
+    {{ resume.region|region }}
+
+
+    {% if resume.employment_type %}
+      <p class="text-muted">{{ resume.employment_type|employment_type }}</p>
+    {% endif %}
+
+    <div class="my-3">{{ resume.description|striptags|truncatewords:15 }}</div>
+
+    {% if show_others and other_resumes|length > 0 %}
+      <p class="mb-2">Ще {{ other_resumes|length }} резюме цього кандидата</p>
+      <ul class="list-unstyled">
+        {% for r in other_resumes %}
+        <li>
+          <a href="{% url 'resume:view' r.id %}" class="text-dark">{{ r.position.title }}</a>,
+          {{ r.region|region }}
+          {% if r.employment_type %}
+            <span class="text-muted">{{ r.employment_type|employment_type }}</span>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+  </div>
+</div>

@@ -1,0 +1,57 @@
+<!--
+  Props
+    paginator
+    page_obj
+-->
+
+<nav class="list-pages mt-4">
+  <ul class="pagination justify-content-center">
+      {% if page_obj.number|add:-2 > 1 %}
+      <li class="page-item">
+          <a class="page-link" href="?page=1">1</a>
+      </li>
+      {% endif %}
+      {% if page_obj.number|add:-3 >= 1 %}
+      <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.number|add:-3 }}">&lt;&lt;</a>
+      </li>
+      {% endif %}
+      {% if page_obj.has_previous %}
+      <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.previous_page_number }}">&lt;</a>
+      </li>
+      {% endif %}
+
+      {% for p in paginator.page_range %}
+      {% if page_obj.number == p %}
+      <li class="page-item active">
+          <a class="page-link" href="?page={{ p }}">{{ p }}</a>
+      </li>
+      {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
+      <li class="page-item">
+          <a class="page-link" href="?page={{ p }}">{{ p }}</a>
+      </li>
+      {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+      <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.next_page_number }}">&gt;</a>
+      </li>
+      {% endif %}
+
+      {% if page_obj.number|add:3 <= paginator.num_pages %}
+      <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.number|add:3 }}">&gt;&gt;</a>
+      </li>
+      {% endif %}
+
+
+      {% if page_obj.number|add:3 <= paginator.num_pages %}
+      <li class="page-item">
+          <a class="page-link" href="?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a>
+      </li>
+      {% endif %}
+
+  </ul>
+</nav>

@@ -12,16 +12,22 @@ from .models import User, Company, UserRole
 # Create your views here.
 class SigninView(View):
     def post(self, request: HttpRequest):
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        user = authenticate(username = email, password = password)
+        form = SigninForm(request.POST)
+        if form.is_valid():
+            user = authenticate(
+                username=form.cleaned_data['email'],
+                password=form.cleaned_data['password']
+            )
+
+        print(form['password'].value())
         if user is None:
-            return render('user/sign-in.html', Utils.html_context(
-            request,
-            context={
-                'errors': 'Unauthorized'
-            }
-        ))
+            return render(request, 'user/sign-in.html', Utils.html_context(
+                request,
+                context={
+                    'form': form,
+                    'errorMsg': 'Unauthorized'
+                }
+            ))
 
         login(request, user)
         return redirect('main:home')
@@ -43,6 +49,7 @@ class SignupView(View):
         if form.is_valid():
             user = form.save(commit=False)
             user.username = user.email
+            user.set_password(form.cleaned_data['password'])
             user.save()
 
             user.assign_role(UserRole.JOB_SEEKER)
@@ -72,11 +79,13 @@ class SignupCompanyView(View):
         company_form = CompanyForm(request.POST, prefix='company')
 
         if user_form.is_valid() and company_form.is_valid():
-            user = user_form.save()
-            company = company_form.save(commit=False)
-
+            user = user_form.save(commit=False)
+            user.username = user.email
+            user.set_password(user_form.cleaned_data['password'])
+            user.save()
             user.assign_role(UserRole.EMPLOYER)
 
+            company = company_form.save(commit=False)
             company.created_by = user
             company.save()
 

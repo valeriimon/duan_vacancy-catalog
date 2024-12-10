@@ -5,17 +5,17 @@
 {% endblock %}
 
 {% block content %}
-<h1 class="text-muted text-center">
+<h1 class="text-muted text-center mb-4">
   {{ resume_id|yesno:'Оновити резюме,Розмістити резюме' }}
 </h1>
-<div class="manage-resume d-flex align-items-center justify-content-center h-100">
+<div class="manage-resume d-flex align-items-center justify-content-center">
   <div class="card manage-resume-card">
     <div class="form-errors">
       {{ form.errors }}
     </div>
     <form method="POST" class="card-body manage-resume-form">
       {% csrf_token %}
-      <div class="form-group">
+      <div class="form-group col-6">
         <div class="position-control mt-3">
           <label for="id_position" class="mb-2 text-muted">Яку позицію ви шукаєте?</label>
           <br>
@@ -26,6 +26,18 @@
           <label for="id_region" class="mb-2 text-muted">В якому регіоні Ви би хотіли працювати?</label>
           <br>
           {{ form.region }}
+        </div>
+
+        <div class="employment-type-control mt-3">
+          <label for="id_employment_type" class="mb-2 text-muted">Який тип працевлаштування?</label>
+          <br>
+          {{ form.employment_type }}
+        </div>
+
+        <div class="salary-control mt-3">
+          <label for="id_salary" class="mb-2 text-muted">Яку заробітну плату Ви очікуєте?</label>
+          <br>
+          {{ form.salary }}
         </div>
 
         <h4 class="mt-3 text-muted">Як з Вами зв'язатися</h4>
@@ -41,7 +53,7 @@
         </div>
 
         <div class="skills-control mt-3">
-          <label for="id_skills" class="mb-2 text-muted">Вкажіть якими навичками Ви володієте</label>
+          <label for="id_skills" class="mb-2 text-muted">Якими навичками Ви володієте</label>
           <br>
           {{ form.skills }}
         </div>

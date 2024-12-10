@@ -1,0 +1,54 @@
+{% load custom-tags %}
+<!--
+  Props:
+    vacancy - front vacancy
+    other_vacancy - other user's vacancies
+    show_others - flag to show others
+    show_save - flag to show save btn
+    show_remove_saved - flag to show remove saved btn
+-->
+<div class="card with-hover">
+  <div class="card-body">
+
+    <div class="card-title d-flex align-items-center justify-content-between">
+      <h2><a href="{% url 'vacancy:view' vacancy.id %}" class="text-dark">{{ vacancy.position.title }}</a></h2>
+      {% if show_save %}
+        {% include 'main/components/save-to-user-btn.html' with data_id=vacancy.id style_classes="save-vacancy-btn" is_saved=vacancy.is_saved %}
+      {% endif %}
+
+      {% if show_remove_saved and vacancy.is_saved %}
+        <a href="{% url 'vacancy:remove-saved' vacancy.id %}" class="btn btn-icon">
+          <i class="bi bi-x-lg"></i>
+          Видалити
+        </a>
+      {% endif %}
+    </div>
+
+    <p><strong>{{ vacancy.salary }}</strong></p>
+
+    <strong>{{ vacancy.created_by.company.name }}</strong>,
+    {{ vacancy.created_by.company.region|region }}
+
+    {% if vacancy.employment_type %}
+      <p class="text-muted">{{ vacancy.employment_type|employment_type }}</p>
+    {% endif %}
+
+    <div class="my-3">{{ vacancy.description|striptags|truncatewords:15 }}</div>
+
+    {% if show_others and other_vacancies|length > 0 %}
+      <p class="mb-2">Ще {{ other_vacancies|length }} ваканції від цієї компанії</p>
+      <ul class="list-unstyled">
+        {% for v in other_vacancies %}
+        <li>
+          <a href="{% url 'vacancy:view' v.id %}" class="text-dark">{{ v.position.title }}</a>,
+          {{ v.created_by.company.region|region }},
+          {% if v.employment_type %}
+            <span class="text-muted">{{ v.employment_type|employment_type }}</span>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+  </div>
+</div>

@@ -1,0 +1,20 @@
+{% extends 'main/base-employer.html' %}
+
+{% load custom-tags %}
+
+{% block index_content %}
+  <div class="row">
+    <div class="col-12 lead">
+      {{ result|length }} кандидатів
+    </div>
+  </div>
+  <div class="row mt-3 grid-multi-row per-row-2">
+  {% for r in result %}
+      <div class="col-6">
+        {% include 'main/components/resume-simple-card.html' with resume=r.resume other_resumes=r.other_resumes show_others="true" show_save=save_resume_btn %}
+      </div>
+  {% endfor %}
+  </div>
+  {% include 'main/components/pagination.html' with page_obj=page_obj paginator=paginator %}
+{% endblock %}
+

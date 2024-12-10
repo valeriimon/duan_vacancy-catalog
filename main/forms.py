@@ -1,11 +1,28 @@
-from django.forms import ModelForm, TextInput, Select
+from django.forms import Form, TextInput, Select, CharField, ChoiceField
 
-class SearchVacancyForm(ModelForm):
-    class Meta:
-        fields = ['positionOrCompany', 'region']
-        widgets = {
-            'positionOrCompany': TextInput(),
-            'region': Select(choices={
-                'dp': 'Дніпро'
-            })
-        }
+from user.models import REGIONS
+
+
+class MainSearchForm(Form):
+    position = CharField(
+        required=False,
+        widget=TextInput(attrs={
+            'class': 'form-control position-control',
+            'placeholder': 'Посада',
+        })
+    )
+    region = ChoiceField(
+        choices=REGIONS,
+        widget=Select(
+            attrs={
+                'class': 'form-control position-control',
+                'placeholder': 'Регіон'
+            },
+        )
+    )
+
+    def update_placeholder(self, field_name, value):
+        self.fields[field_name].widget.attrs.update({
+            'placeholder': value,
+        })
+
