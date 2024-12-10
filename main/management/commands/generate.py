@@ -38,22 +38,24 @@ class Command(BaseCommand):
         parser.add_argument('--max-vacancies-per-user', type=int, help='Максимальна кількість вакансій для створення на одного роботодавця')
 
     def handle(self, *args, **kwargs):
-        total_employers = kwargs['total-employers']
-        total_job_seekers = kwargs['total-job-seekers']
+        total_employers = kwargs['total_employers']
+        total_job_seekers = kwargs['total_job_seekers']
         if total_employers or total_job_seekers:
             self._preset_dependencies()
 
         if total_employers:
             users = self.create_employers(total_employers)
-            max_vacancies_per_user = kwargs['max-vacancies-per-user'] or 0
+            max_vacancies_per_user = kwargs['max_vacancies_per_user'] or 0
             if max_vacancies_per_user > 0 and len(users):
                 self.create_vacancies(randint(1, max_vacancies_per_user), users)
 
         if total_job_seekers:
             users = self.create_job_seekers(total_job_seekers)
-            max_resumes_per_user = kwargs['max-resumes-per-user'] or 0
+            max_resumes_per_user = kwargs['max_resumes_per_user'] or 0
             if max_resumes_per_user > 0 and len(users):
                 self.create_resumes(randint(1, max_resumes_per_user), users)
+
+            return
 
         CommandError('No total-employers or total-job-seekers arguments passed')
 
@@ -67,7 +69,7 @@ class Command(BaseCommand):
 
         self.job_skills = list(JobSkill.objects.all())
         if len(self.job_skills) == 0:
-            skills = map(lambda sk_sample: JobSkill(name=sk_sample), self.job_skills_sample)
+            skills = map(lambda sk_sample: JobSkill(value=sk_sample), self.job_skills_sample)
             skills = JobSkill.objects.bulk_create(skills)
             self.job_skills = list(skills)
 

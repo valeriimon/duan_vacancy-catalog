@@ -1,9 +1,11 @@
 from django.db import models
 from django.db.models import Manager, Q
 
+# Honestly speaking, it's GPT output.
 
-# Create your models here.
-
+# The goal is to simplify query for optional fields
+# For example, filter( Q(field=some_dict['some_field']) | Q(field=some_dict['some_field2']))
+# And 'some_field' is None, that field will be excluded from the query
 class CustomBaseManager(Manager):
     def _clean_q_objects(self, args):
         new_args = []
