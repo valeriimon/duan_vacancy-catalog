@@ -150,9 +150,8 @@ STATICFILES_FINDERS = [
     'sass_processor.finders.CssFinder',
 ]
 
-
-STATIC_ROOT = BASE_DIR / 'static/'
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles/'
 SASS_PROCESSOR_ROOT = STATIC_ROOT
 
 # Default primary key field type
