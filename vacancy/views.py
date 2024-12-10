@@ -99,7 +99,7 @@ class VacancyListView(ListView):
 
     def get_filters_qs(self, position, region):
         filtered_qs = Vacancy.objects.filter(
-                Q(position__title__icontains=position) | Q(created_by__company__name=position),
+                Q(position__title__icontains=position) | Q(created_by__company__name__icontains=position),
                 created_by__company__region=region
             )
 
