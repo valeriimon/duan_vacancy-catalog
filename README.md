@@ -26,7 +26,7 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-## Fake portal content
+## [TESTING] Fake portal content
 
 ```bash
 python manage.py generate --help # Cmd to generate portal data
