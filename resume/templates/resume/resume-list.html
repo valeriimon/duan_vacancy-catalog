@@ -5,12 +5,12 @@
 {% block index_content %}
   <div class="row">
     <div class="col-12 lead">
-      {{ result|length }} кандидатів
+      {{ searched_total }} кандидатів
     </div>
   </div>
-  <div class="row mt-3 grid-multi-row per-row-2">
+  <div class="row">
   {% for r in result %}
-      <div class="col-6">
+      <div class="col-8 mt-4">
         {% include 'main/components/resume-simple-card.html' with resume=r.resume other_resumes=r.other_resumes show_others="true" show_save=save_resume_btn %}
       </div>
   {% endfor %}

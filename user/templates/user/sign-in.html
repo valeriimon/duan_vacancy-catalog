@@ -4,12 +4,13 @@
 <div class="auth d-flex align-items-center justify-content-center h-100 text-center">
   <div class="card auth-card">
     <div class="errors text-danger">
+      {{ form.errors }}
       <p>{{ errorMsg }}</p>
     </div>
     <form method="POST" class="card-body auth-form">
       {% csrf_token %}
       <div class="form-group">
-        {{ form.email }}
+        {{ form.username }}
         {{ form.password }}
       </div>
       <button type="submit" class="btn btn-primary submit-btn w-100">Увійти</button>

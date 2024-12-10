@@ -10,7 +10,7 @@ from vacancy.models import Vacancy
 
 
 class Command(BaseCommand):
-    help = 'Information of our command generate.'
+    help = 'Генерує дані для порталу'
     job_positions: list
     job_skills: list
     job_skills_sample = [
@@ -32,10 +32,10 @@ class Command(BaseCommand):
     ]
 
     def add_arguments(self, parser):
-        parser.add_argument('total-employers', type=int, help='Кількість')
-        parser.add_argument('total-job-seekers', type=int, help='Кількість')
-        parser.add_argument('max-resumes-per-user', type=int, help='')
-        parser.add_argument('max-vacancies-per-user', type=int, help='')
+        parser.add_argument('--total-employers', type=int, help='Кількість роботодавців для створення')
+        parser.add_argument('--total-job-seekers', type=int, help='Кількість шукачів для створення')
+        parser.add_argument('--max-resumes-per-user', type=int, help='Максимальна кількість резюме для створення на одного шукача')
+        parser.add_argument('--max-vacancies-per-user', type=int, help='Максимальна кількість вакансій для створення на одного роботодавця')
 
     def handle(self, *args, **kwargs):
         total_employers = kwargs['total-employers']
@@ -54,6 +54,8 @@ class Command(BaseCommand):
             max_resumes_per_user = kwargs['max-resumes-per-user'] or 0
             if max_resumes_per_user > 0 and len(users):
                 self.create_resumes(randint(1, max_resumes_per_user), users)
+
+        CommandError('No total-employers or total-job-seekers arguments passed')
 
     def _preset_dependencies(self):
         self.job_positions = list(JobPosition.objects.all())

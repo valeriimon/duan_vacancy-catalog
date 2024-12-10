@@ -13,24 +13,30 @@ from .models import User, Company, UserRole
 class SigninView(View):
     def post(self, request: HttpRequest):
         form = SigninForm(request.POST)
+
         if form.is_valid():
             user = authenticate(
-                username=form.cleaned_data['email'],
+                username=form.cleaned_data['username'],
                 password=form.cleaned_data['password']
             )
 
-        print(form['password'].value())
-        if user is None:
-            return render(request, 'user/sign-in.html', Utils.html_context(
-                request,
-                context={
-                    'form': form,
-                    'errorMsg': 'Unauthorized'
-                }
-            ))
+            if user is None:
+                return render(request, 'user/sign-in.html', Utils.html_context(
+                    request,
+                    context={
+                        'errorMsg': 'Unauthorized'
+                    }
+                ))
 
-        login(request, user)
-        return redirect('main:home')
+            login(request, user)
+            return redirect('main:home')
+
+        return render(request, 'user/sign-in.html', Utils.html_context(
+            request,
+            context={
+                'form': form,
+            }
+        ))
 
     def get(self, request: HttpRequest):
         return render(request, 'user/sign-in.html', Utils.html_context(
@@ -47,11 +53,8 @@ class SignupView(View):
     def post(self, request: HttpRequest):
         form = SignupForm(request.POST)
         if form.is_valid():
-            user = form.save(commit=False)
-            user.username = user.email
-            user.set_password(form.cleaned_data['password'])
+            user = form.save()
             user.save()
-
             user.assign_role(UserRole.JOB_SEEKER)
 
             login(request, user)
@@ -66,10 +69,12 @@ class SignupView(View):
         ))
 
     def get(self, request: HttpRequest):
+        form = SignupForm()
+        form.fields['age'].required = True
         return render(request, 'user/sign-up.html', Utils.html_context(
             request,
             context={
-                'form': SignupForm()
+                'form': form
             }
         ))
 
@@ -79,10 +84,7 @@ class SignupCompanyView(View):
         company_form = CompanyForm(request.POST, prefix='company')
 
         if user_form.is_valid() and company_form.is_valid():
-            user = user_form.save(commit=False)
-            user.username = user.email
-            user.set_password(user_form.cleaned_data['password'])
-            user.save()
+            user = user_form.save()
             user.assign_role(UserRole.EMPLOYER)
 
             company = company_form.save(commit=False)
@@ -92,7 +94,6 @@ class SignupCompanyView(View):
             login(request, user)
             return redirect('main:home')
 
-        print('errors - ', user_form.errors)
         return render(
             request,
             'user/sign-up-company.html',

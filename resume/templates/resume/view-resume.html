@@ -2,26 +2,24 @@
 {% load custom-tags %}
 {% block content %}
   <div class="row">
-    <div class="col-md-8 col-12">
+    <div class="col-lg-8 col-md-12">
       <div class="card">
         <div class="card-body">
-
+          {% if resume.created_by.username == auth_user.username %}
             <div class="card-top-actions pb-2 mb-2 d-flex justify-content-between">
-              {% if resume.created_by.username == auth_user.username %}
                 <a href="{% url 'resume:manage' resume.id %}" role="button" class="btn btn-primary">Редагувати</a>
-              {% endif %}
-
-              {% if is_employer %}
-                <a href="" class="btn btn-primary">Запропонувати вакансію</a>
-                {% include 'main/components/save-to-user-btn.html' with data_id=resume.id is_saved=resume.is_saved %}
-              {% endif %}
             </div>
-
-          <div class="card-title">
-            <h1>{{ resume.created_by.username }}</h1>
+          {% endif %}
+          <div class="card-title d-flex justify-content-between align-items-center">
+            <h1>{{ resume.created_by.username }}, {{ resume.salary }}</h1>
+            {% include 'main/components/save-to-user-btn.html' with data_id=resume.id is_saved=resume.is_saved %}
           </div>
           <h2 class="mt-4 mb-3">{{resume.position.title}}</h2>
           <ul class="attr-list">
+            <li class="attr-item">
+              <div class="text-muted attr-name">Зайнятість:</div>
+              <div class="attr-value">{{ resume.employment_type|employment_type }}</div>
+            </li>
             <li class="attr-item">
               <div class="text-muted attr-name">Вік:</div>
               <div class="attr-value">{{ resume.created_by.age }}</div>

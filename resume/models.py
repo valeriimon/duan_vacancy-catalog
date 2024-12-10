@@ -10,7 +10,7 @@ class Resume(models.Model):
     salary = models.CharField(max_length=100)
     description = HTMLField()
     skills = models.ManyToManyField(JobSkill)
-    region = models.CharField('Регіон', max_length=2, choices=REGIONS, null=False)
+    region = models.CharField(max_length=2, choices=REGIONS, default=REGIONS[0][0])
     phone_number = models.CharField(max_length=100)
     email = models.EmailField()
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='my_resumes')

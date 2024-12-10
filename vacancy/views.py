@@ -1,4 +1,5 @@
 from http import HTTPStatus
+from urllib.parse import urlencode
 
 from django.contrib.auth import logout
 from django.db.models import QuerySet, Q, Case, When, Value, BooleanField, Count
@@ -62,7 +63,8 @@ class VacancyListView(ListView):
     model = Vacancy
     template_name = 'vacancy/vacancy-list.html'
     context_object_name = 'result'
-    paginate_by = 10
+    paginate_by = 5
+    total: int
 
     def get_queryset(self):
         search_form = VacancySearchForm(self.request.GET)
@@ -70,21 +72,9 @@ class VacancyListView(ListView):
             search_form['position'].value(),
             search_form['region'].value()
         )
-        grouped_qs = filtered_qs.values('created_by').annotate(vacancy_count=Count('id'))
-        vacancy_list = []
-        for group in grouped_qs:
-            user_id = group['created_by']
 
-            vacancy = filtered_qs.filter(created_by__pk=user_id).first()
-            other_vacancies= list(Vacancy.objects
-                .filter(created_by__pk=user_id)
-                .exclude(id=vacancy.id))
-
-            vacancy_list.append({
-                'other_vacancies': other_vacancies,
-                'vacancy': vacancy
-            })
-
+        vacancy_list = list(filtered_qs)
+        self.total = len(vacancy_list)
         return vacancy_list
 
     def get_context_data(self, **kwargs):
@@ -92,11 +82,13 @@ class VacancyListView(ListView):
         total_vacancies = Vacancy.objects.count()
         base_context = Utils.html_context(self.request, context={
             'total_vacancies': total_vacancies,
+            'searched_total': self.total,
             'search_form': VacancySearchForm(self.request.GET, initial={
                 'region': 'dp'
             }),
             'save_vacancy_btn': self.request.user.is_authenticated and self.request.user.is_job_seeker(),
-            'show_subheader': True
+            'show_subheader': True,
+            'search_params': self.get_search_query()
         })
 
         return {
@@ -115,6 +107,12 @@ class VacancyListView(ListView):
             filtered_qs = annotate_is_vacancy_saved_to_user(filtered_qs, self.request.user)
 
         return filtered_qs
+
+    def get_search_query(self):
+        form = VacancySearchForm(self.request.GET)
+        if form.is_valid():
+            return urlencode(form.cleaned_data)
+        return ''
 
 class VacancyView(View):
     def get(self, request: HttpRequest, id: int):

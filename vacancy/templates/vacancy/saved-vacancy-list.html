@@ -1,10 +1,10 @@
 {% extends 'main/base-job-seeker.html' %}
 
 {% block index_content %}
-  <h1 class="text-muted mb-4">Збережені вакансії</h1>
-  <div class="row mt-3 grid-multi-row per-row-2">
+  <h1 class="text-muted">Збережені вакансії</h1>
+  <div class="row">
     {% for v in vacancy_list %}
-      <div class="col-6">
+      <div class="col-8 mt-4">
           {% include 'main/components/vacancy-simple-card.html' with vacancy=v show_remove_saved='true' %}
         </div>
     {% endfor %}

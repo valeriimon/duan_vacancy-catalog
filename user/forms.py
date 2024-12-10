@@ -1,29 +1,29 @@
-from django.db.models import EmailField, IntegerField
-from django.forms import ModelForm, EmailInput, TextInput, PasswordInput, Select, NumberInput, HiddenInput
+
+from django.forms import ModelForm, EmailInput, TextInput, PasswordInput, Select, NumberInput, Form, CharField
 from user.models import User, Company
 
 
-class SigninForm(ModelForm):
-    class Meta:
-        model = User
-        fields = ['email', 'password']
-        widgets = {
-            'email': EmailInput(attrs={
+class SigninForm(Form):
+    username = CharField(widget=TextInput(attrs={
                 'class': 'form-control mb-3',
-                'placeholder': 'Ел. пошта'
-            }),
-            'password': PasswordInput(attrs={
+                'placeholder': "Ваше ім'я"
+            }))
+
+    password = CharField(widget=PasswordInput(attrs={
                 'class': 'form-control mb-3',
                 'placeholder': 'Пароль'
-            }),
-        }
+            }))
 
 
 class SignupForm(ModelForm):
     class Meta:
         model = User
-        fields = ['email', 'password', 'region']
+        fields = ['username', 'age', 'email', 'password', 'region']
         widgets = {
+            'username': TextInput(attrs={
+                'class': 'form-control mb-3',
+                'placeholder': "Ваше ім'я"
+            }),
             'email': EmailInput(attrs={
                 'class': 'form-control mb-3',
                 'placeholder': 'Ел. пошта',
@@ -33,6 +33,10 @@ class SignupForm(ModelForm):
                 'class': 'form-control mb-3',
                 'placeholder': 'Пароль',
                 'required': 'true'
+            }),
+            'age': NumberInput(attrs={
+                'class': 'form-select mb-3',
+                'placeholder': 'Вік',
             }),
             'region': Select(attrs={
                 'class': 'form-select mb-3',

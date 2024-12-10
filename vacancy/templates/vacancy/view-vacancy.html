@@ -5,21 +5,22 @@
     <div class="col-md-8 col-12">
       <div class="card">
         <div class="card-body">
+          {% if vacancy.created_by.username == auth_user.username %}
             <div class="card-top-actions pb-2 mb-2 d-flex justify-content-between">
-              {% if vacancy.created_by.username == auth_user.username %}
-                <a href="{% url 'vacancy:manage' vacancy.id %}" role="button" class="btn btn-primary">Редагувати</a>
-              {% endif %}
-
-              {% if is_job_seeker %}
-                <a href="" class="btn btn-primary">Відгукнутися на вакансію</a>
-                {% include 'main/components/save-to-user-btn.html' with data_id=vacancy.id is_saved=vacancy.is_saved %}
-              {% endif %}
+              <a href="{% url 'vacancy:manage' vacancy.id %}" role="button" class="btn btn-primary">Редагувати</a>
             </div>
-
-          <div class="card-title">
+          {% endif %}
+          <div class="card-title d-flex justify-content-between align-items-center">
             <h1>{{ vacancy.position.title }}</h1>
+            {% if vacancy.created_by.username != auth_user.username %}
+              {% include 'main/components/save-to-user-btn.html' with data_id=vacancy.id is_saved=vacancy.is_saved %}
+            {% endif %}
           </div>
-          <p><strong>{{ vacancy.salary }}</strong></p>
+          <p>
+            <strong>{{ vacancy.salary }}</strong>
+            <br>
+            <span class="text-muted">{{ vacancy.employment_type|employment_type }}</span>
+          </p>
           <p>
             <strong>{{ vacancy.created_by.company.name }}</strong>,
             {{ vacancy.created_by.company.region|region }}
@@ -37,7 +38,7 @@
               <div class="attr-value">{{ vacancy.phone_number }}</div>
             </li>
           </ul>
-          <p>{{ vacancy.employment_type }}</p>
+
           <h2 class="mt-4 mb-3">Знання і навички</h2>
           <div class="skill-list">
             {% for skill in vacancy.skills.all %}

@@ -3,13 +3,21 @@
 {% block content %}
 <div class="auth d-flex align-items-center justify-content-center h-100 text-center">
   <div class="card auth-card">
+    <div class="errors text-danger">
+      {{ form.errors }}
+      {% if errorMsg %}
+        <p>{{ errorMsg }}</p>
+      {% endif %}
+    </div>
     <form action="{{ form_action }}" method="POST" class="card-body auth-form">
       {% csrf_token %}
       <div class="form-group">
+        {{ form.username }}
         {{ form.email }}
         {{ form.password }}
         <label for="region" class="text-start w-100 text-muted mb-1">Ваш Регіон</label>
         {{ form.region }}
+        {{ form.age }}
       </div>
       <button type="submit" class="btn btn-primary submit-btn w-100">Зареєструватися</button>
 

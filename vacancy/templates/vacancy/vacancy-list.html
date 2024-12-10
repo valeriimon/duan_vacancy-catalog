@@ -5,13 +5,13 @@
 {% block index_content %}
   <div class="row">
     <div class="col-12 lead">
-      {{ result|length }} вакансій
+      {{ searched_total }} вакансій
     </div>
   </div>
-  <div class="row mt-3 grid-multi-row per-row-2">
+  <div class="row">
   {% for r in result %}
-      <div class="col-6">
-        {% include 'main/components/vacancy-simple-card.html' with vacancy=r.vacancy other_vacancies=r.other_vacancies show_others="true" show_save=save_vacancy_btn %}
+      <div class="col-8 mt-4">
+        {% include 'main/components/vacancy-simple-card.html' with vacancy=r show_save=save_vacancy_btn %}
       </div>
   {% endfor %}
   </div>

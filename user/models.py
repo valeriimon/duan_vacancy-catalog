@@ -19,9 +19,9 @@ EMPLOYMENT_TYPE = [
 ]
 
 class User(AbstractUser):
-    region = models.CharField('Регіон', max_length=2, choices=REGIONS, null=False)
+    region = models.CharField(max_length=2, choices=REGIONS, default=REGIONS[0][0])
     auth_complete = models.BooleanField(default=True)
-    age = models.IntegerField(null=True)
+    age = models.IntegerField(blank=True)
     phone_number = models.CharField(max_length=100)
 
     saved_resumes = models.ManyToManyField('resume.Resume', related_name='saved_by')
@@ -40,7 +40,7 @@ class User(AbstractUser):
 class Company(models.Model):
     name = models.CharField(null=False, max_length=100)
     address_text = models.CharField(max_length=100)
-    region = models.CharField('Регіон', max_length=2, choices=REGIONS, default='dp', null=False)
+    region = models.CharField(max_length=2, choices=REGIONS, default=REGIONS[0][0])
     phone_number = models.CharField(max_length=100)
     employees_count = models.IntegerField()
     created_by = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name='company')

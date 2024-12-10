@@ -15,7 +15,7 @@ class MainSearchForm(Form):
         choices=REGIONS,
         widget=Select(
             attrs={
-                'class': 'form-control position-control',
+                'class': 'form-control region-control',
                 'placeholder': 'Регіон'
             },
         )

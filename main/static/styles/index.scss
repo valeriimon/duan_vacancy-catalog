@@ -295,13 +295,3 @@ body {
     width: 200px;
   }
 }
-
-.grid-multi-row {
-  &.per-row {
-    &-2 {
-      :not(:nth-child(-n+2)) {
-        margin-top: calc(var(--bs-gutter-x) * .5 * 2);
-      }
-    }
-  }
-}

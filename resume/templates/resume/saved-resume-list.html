@@ -1,10 +1,10 @@
 {% extends 'main/base-employer.html' %}
 
 {% block index_content %}
-  <h1 class="text-muted mb-4">Збережені резюме</h1>
-  <div class="row mt-3 grid-multi-row per-row-2">
+  <h1 class="text-muted">Збережені резюме</h1>
+  <div class="row">
     {% for r in resume_list %}
-      <div class="col-6">
+      <div class="col-8 mt-4">
           {% include 'main/components/resume-simple-card.html' with resume=r show_remove_saved='true' %}
         </div>
     {% endfor %}

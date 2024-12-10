@@ -1,4 +1,5 @@
 from http import HTTPStatus
+from urllib.parse import urlencode
 
 from django.contrib.auth import logout
 from django.db.models import Count, QuerySet, Case, When, Value, BooleanField
@@ -62,7 +63,8 @@ class ResumeListView(ListView):
     model = Resume
     template_name = 'resume/resume-list.html'
     context_object_name = 'result'
-    paginate_by = 2
+    paginate_by = 5
+    searhed_total: int
 
     def get_queryset(self):
         search_form = MainSearchForm(self.request.GET)
@@ -83,9 +85,9 @@ class ResumeListView(ListView):
             resume_list.append({
                 'other_resumes': other_resumes,
                 'resume': resume,
-
             })
 
+        self.searhed_total = len(resume_list)
         return resume_list
 
     def get_context_data(self, **kwargs):
@@ -96,9 +98,11 @@ class ResumeListView(ListView):
         base_context = Utils.html_context(self.request, context={
             'total_users': total_users,
             'total_resumes': total_resumes,
+            'searched_total': self.searhed_total,
             'search_form': MainSearchForm(self.request.GET, initial={
                 'region': 'dp'
             }),
+            'search_query': self.get_search_query(),
             'save_resume_btn': self.request.user.is_authenticated and self.request.user.is_employer(),
             'show_subheader': True
         })
@@ -108,7 +112,6 @@ class ResumeListView(ListView):
             **base_context
         }
 
-    # def get_resume_list_ qs
     def get_filters_qs(self, position, region):
         filtered_qs = Resume.objects.filter(
                 position__title__icontains=position,
@@ -120,6 +123,11 @@ class ResumeListView(ListView):
 
         return filtered_qs
 
+    def get_search_query(self):
+        form = MainSearchForm(self.request.GET)
+        if form.is_valid():
+            return urlencode(form.cleaned_data)
+        return ''
 
 class ResumeView(View):
     def get(self, request: HttpRequest, id: int):
@@ -209,8 +217,6 @@ class ManageResumeView(View):
             resume.created_by = self.request.user
             resume.save()
             form.save_m2m()
-            print('resume id -- ', resume.id)
-            print('resume id2 -- ', resume.pk)
             return self.redirect_to_view(resume.id)
 
         return render(self.request, 'resume/manage-resume.html', Utils.html_context(
