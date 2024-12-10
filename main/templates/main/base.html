@@ -1,5 +1,6 @@
 {% load static %}
 {% load sass_tags %}
+{% load tz %}
 
 <!doctype html>
 <html lang="ua">
@@ -43,9 +44,7 @@
     </div>
   </main>
   <footer class="footer">
-    <div class="container">
-
-    </div>
+    <p class="m-0">&copy; {% now 'Y' %} VACANCY.ua. All rights reserved.</p>
   </footer>
 
   {% block footer %}
