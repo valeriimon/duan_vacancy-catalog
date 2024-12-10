@@ -61,11 +61,14 @@ class Command(BaseCommand):
 
     def _preset_dependencies(self):
         self.job_positions = list(JobPosition.objects.all())
-        if list(self.job_positions) == 0:
+        if len(self.job_positions) == 0:
+            positions = list()
             for i in range(50):
                 f = self._get_faker()
-                p = JobPosition.objects.create(title=f.job())
-                self.job_positions.append(p)
+                p = JobPosition(title=f.job())
+                positions.append(p)
+
+            self.job_positions = JobPosition.objects.bulk_create(positions)
 
         self.job_skills = list(JobSkill.objects.all())
         if len(self.job_skills) == 0:
