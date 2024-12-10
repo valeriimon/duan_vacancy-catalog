@@ -9,7 +9,7 @@ from user.models import User, UserRole, REGIONS, Company, EMPLOYMENT_TYPE
 from vacancy.models import Vacancy
 
 
-class GenerateCommand(BaseCommand):
+class Command(BaseCommand):
     help = 'Information of our command generate.'
     job_positions: list
     job_skills: list
@@ -56,17 +56,15 @@ class GenerateCommand(BaseCommand):
                 self.create_resumes(randint(1, max_resumes_per_user), users)
 
     def _preset_dependencies(self):
-        positions = list(JobPosition.objects.all())
-        if list(positions) == 0:
+        self.job_positions = list(JobPosition.objects.all())
+        if list(self.job_positions) == 0:
             for i in range(50):
                 f = self._get_faker()
                 p = JobPosition.objects.create(title=f.job())
-                positions.append(p)
+                self.job_positions.append(p)
 
-            self.job_positions = positions
-
-        skills = list(JobSkill.objects.all())
-        if len(skills) == 0:
+        self.job_skills = list(JobSkill.objects.all())
+        if len(self.job_skills) == 0:
             skills = map(lambda sk_sample: JobSkill(name=sk_sample), self.job_skills_sample)
             skills = JobSkill.objects.bulk_create(skills)
             self.job_skills = list(skills)
@@ -115,10 +113,10 @@ class GenerateCommand(BaseCommand):
             u.set_password('123')
             u.save()
             u.assign_role(role)
-        except:
-            print('Помилка створення юзера')
+        except Exception as ex:
+            print(f'Помилка створення юзера {ex}')
         else:
-            print(f'Юзера створено: Ел.пошта - {u.emai}, роль - {role}')
+            print(f'Юзера створено: Ел.пошта - {u.email}, роль - {role}')
             return u
 
     def _create_company(self, created_by):
@@ -133,14 +131,12 @@ class GenerateCommand(BaseCommand):
                 created_by=created_by
             )
             c.save()
-        except:
-            print('Помилка створення компанії')
+        except Exception as ex:
+            print(f'Помилка створення компанії {ex}')
         else:
             print(f'Компанія створена: Назва {c.name}')
-        return c
+            return c
 
-
-        return c
 
     def _create_resume(self, created_by):
         try:
@@ -157,8 +153,8 @@ class GenerateCommand(BaseCommand):
             )
             r.save()
             r.skills.add(*self._get_random_job_skills())
-        except:
-            print('Помилка створення резюме')
+        except Exception as ex:
+            print(f'Помилка створення резюме {ex}')
         else:
             print(f'Резюме створено: Позиція {r.position.title}')
             return r
@@ -178,8 +174,8 @@ class GenerateCommand(BaseCommand):
             )
             v.save()
             v.skills.add(*self._get_random_job_skills())
-        except:
-            print('Помилка створення вакансії')
+        except Exception as ex:
+            print(f'Помилка створення вакансії {ex}')
         else:
             print(f'Вакансія створена: Позиція {v.position.title}')
             return v
