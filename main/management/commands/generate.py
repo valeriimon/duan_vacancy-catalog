@@ -167,7 +167,6 @@ class Command(BaseCommand):
                 employment_type=self._get_random_employment_type(),
                 salary=f'{randint(10000, 100000)} грн',
                 description=''.join(f.sentences(10)),
-                region=self._get_random_region(),
                 phone_number=f.phone_number(),
                 email=f.email(),
                 created_by=created_by
