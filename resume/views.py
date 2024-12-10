@@ -5,6 +5,7 @@ from django.contrib.auth import logout
 from django.db.models import Count, QuerySet, Case, When, Value, BooleanField
 from django.http import HttpRequest, HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render, redirect
+from django.template.context_processors import request
 
 from django.views.generic import View, ListView
 from user.models import User, UserRole
@@ -138,7 +139,10 @@ class ResumeView(View):
                 .prefetch_related('skills')
             )
 
-            resume = annotate_is_resume_saved_to_user(resume_qs, request.user).get(id=id)
+            if request.user.is_authenticated:
+                resume_qs = annotate_is_resume_saved_to_user(resume_qs, request.user)
+
+            resume = resume_qs.get(id=id)
         except Resume.DoesNotExist:
             return redirect('main:error')
 
@@ -148,13 +152,17 @@ class ResumeView(View):
             other_resumes = self.get_user_other_resumes(resume.created_by.id, resume.id)
 
 
-        parent_template = 'main/base-employer.html' if request.user.is_employer() else 'main/base-job-seeker.html'
+        parent_template = (
+            'main/base-employer.html'
+            if request.user.is_authenticated and request.user.is_employer()
+            else 'main/base-job-seeker.html'
+        )
         return render(request, 'resume/view-resume.html', Utils.html_context(
             request,
             context={
                 'resume': resume,
                 'other_resumes': other_resumes,
-                'is_employer': request.user.is_employer(),
+                'is_employer': request.user.is_authenticated and request.user.is_employer(),
                 'parent_template': parent_template
             }
         ))

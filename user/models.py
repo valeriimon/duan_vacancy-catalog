@@ -11,6 +11,8 @@ class UserRole(Enum):
 REGIONS = [
     ('dp', 'Дніпро'),
     ('kv', 'Київ'),
+    ('od', 'Одеса'),
+    ('lv', 'Львів')
 ]
 
 EMPLOYMENT_TYPE = [

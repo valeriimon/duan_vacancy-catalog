@@ -4,7 +4,7 @@
     page_obj
     search_query
 -->
-
+{% if paginator.num_pages > 1 %}
 <nav class="list-pages mt-4">
   <ul class="pagination justify-content-center">
       {% if page_obj.number|add:-2 > 1 %}
@@ -56,3 +56,4 @@
 
   </ul>
 </nav>
+{% endif %}

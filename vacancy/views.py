@@ -123,7 +123,10 @@ class VacancyView(View):
                 .prefetch_related('skills')
             )
 
-            vacancy = annotate_is_vacancy_saved_to_user(vacancy_qs, request.user).get(id=id)
+            if request.user.is_authenticated:
+                vacancy_qs = annotate_is_vacancy_saved_to_user(vacancy_qs, request.user)
+
+            vacancy = vacancy_qs.get(id=id)
         except Vacancy.DoesNotExist:
             return redirect('main:error')
 
@@ -133,13 +136,17 @@ class VacancyView(View):
             other_vacancies = self.get_user_other_vacancies(vacancy.created_by.id, vacancy.id)
 
 
-        parent_template = 'main/base-employer.html' if request.user.is_employer() else 'main/base-job-seeker.html'
+        parent_template = (
+            'main/base-employer.html'
+            if request.user.is_authenticated and request.user.is_employer()
+            else 'main/base-job-seeker.html'
+        )
         return render(request, 'vacancy/view-vacancy.html', Utils.html_context(
             request,
             context={
                 'vacancy': vacancy,
                 'other_vacancies': other_vacancies,
-                'is_job_seeker': request.user.is_job_seeker(),
+                'is_job_seeker': request.user.is_authenticated and request.user.is_job_seeker(),
                 'parent_template': parent_template
             }
         ))
