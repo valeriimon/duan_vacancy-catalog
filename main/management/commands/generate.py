@@ -183,10 +183,10 @@ class Command(BaseCommand):
         return Faker('uk_UA')
 
     def _get_random_position(self):
-        return self.job_positions[randint(0, len(self.job_positions))]
+        return self.job_positions[randint(0, len(self.job_positions) - 1)]
 
     def _get_random_job_skills(self):
-        return sample(self.job_skills, k=randint(0, len(self.job_skills)))
+        return sample(self.job_skills, k=randint(0, len(self.job_skills) - 1))
 
     def _get_random_employment_type(self):
         return choice(EMPLOYMENT_TYPE)[0]
