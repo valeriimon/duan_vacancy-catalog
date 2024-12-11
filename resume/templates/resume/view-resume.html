@@ -12,7 +12,7 @@
           {% endif %}
           <div class="card-title d-flex justify-content-between align-items-center">
             <h1>{{ resume.created_by.username }}, {{ resume.salary }}</h1>
-            {% if auth_user and vacancy.created_by.username != auth_user.username %}
+            {% if auth_user and resume.created_by.username != auth_user.username %}
               {% include 'main/components/save-to-user-btn.html' with data_id=resume.id style_classes="save-resume-btn" is_saved=resume.is_saved %}
             {% endif %}
           </div>
