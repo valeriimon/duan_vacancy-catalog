@@ -38,7 +38,6 @@ class ResumeForm(ModelForm):
             }),
             'skills': autocomplete.ModelSelect2Multiple(
                 attrs={
-                    'create_id': 'true',
                     'data-theme': 'bootstrap-5',
                     'data-placeholder': 'Навички',
                 },

@@ -6,7 +6,6 @@ from tinymce.models import HTMLField
 
 # Create your models here.
 class Vacancy(models.Model):
-    title = models.CharField(max_length=100)
     employment_type = models.CharField(max_length=20, choices=EMPLOYMENT_TYPE, null=True)
     salary = models.CharField(max_length=100)
     position = models.ForeignKey(JobPosition, on_delete=models.DO_NOTHING)
