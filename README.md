@@ -2,8 +2,6 @@
 
 Goal: familiarize with django MPA application
 
-Demo: [valeriimon.pythonanywhere.com](https://valeriimon.pythonanywhere.com/)
-
 ## Installation
 
 1. Install dependencies
